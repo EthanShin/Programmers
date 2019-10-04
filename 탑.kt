@@ -1,24 +1,25 @@
 class Solution {
     fun solution(heights: IntArray): IntArray {
         var answer = intArrayOf()
-        var jump = 0
+        var max = 0
+        var maxIndex = 0
 
-        heights.reduceRightIndexed { index, i, acc ->
-
-            if (acc >= i) {
-                jump++
-                acc
+        heights.forEachIndexed { index, int ->
+            if (int >= max) {
+                max = int
+                maxIndex = index
+                answer += 0
             } else {
-                for (i in 0..jump)
-                    answer += index + 1
-                jump = 0
-                i
+                val sliceArray = heights.sliceArray(maxIndex until index)
+                sliceArray.reversed().forEachIndexed sliceForEach@{ sliceIndex, sliceInt ->
+                    if (int < sliceInt) {
+                        answer += (sliceArray.size - sliceIndex) + maxIndex
+                        return@forEachIndexed
+                    }
+                }
             }
         }
 
-        for (i in 0..jump)
-            answer += 0
-
-        return answer.reversedArray()
+        return answer
     }
 }
